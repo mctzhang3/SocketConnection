@@ -14,6 +14,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.io.PrintWriter
+import java.lang.Exception
 import java.net.Socket
 
 class MainActivity : AppCompatActivity() {
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(SocketConnection::class.java)
 
         viewModel?.deviceList?.observe(this) {
-            var dev: String = ""
+            var dev = ""
             for (s in it) {
                 dev = dev + s + "\n"
             }
@@ -39,31 +40,15 @@ class MainActivity : AppCompatActivity() {
 
     fun getDeviceList(v: View) {
         val ipaddress: String = binding.etIpAddress.text.toString()
-        val port = binding.etIpPort.text.toString().toInt()
+        val portStr = binding.etIpPort.text.toString()
+        var port = 0
+        try {
+            port = portStr.toInt()
+        } catch (e: Exception) {
+            //
+        }
+//        val port = binding.etIpPort.text.toString().toInt()
         val query = binding.etQuery.text.toString()
         viewModel?.getDeviceList(ipaddress, port, query)
-
-//        Executors.newSingleThreadExecutor().execute {
-//            try {
-//                val socket = Socket(ipaddress, port)
-//                val pw = PrintWriter(socket?.getOutputStream(), true)
-//                val reader = BufferedReader(InputStreamReader(socket?.getInputStream()))
-//
-//                pw?.write(query)
-//                pw?.println()
-//                val resp = reader?.readLine()
-//
-//                Log.d("amz095", "resp from server = $resp")
-//
-//                reader?.close()
-//                pw?.close()
-//                socket?.close()
-//
-//            } catch (e: IOException) {
-//                //
-//                Log.d("amz095", "IOException ... $e")
-//            }
-//        }
     }
-
 }
