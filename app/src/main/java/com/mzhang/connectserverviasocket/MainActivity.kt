@@ -22,6 +22,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this).get(SocketConnection::class.java)
 
+        supportActionBar?.hide()
+//        if(getSupportedActionbar()!=null)
+//            this.getSupportedActionBar().hide();
+
         hosts = arrayListOf()
 //        initRecycler()
         initObserver()
