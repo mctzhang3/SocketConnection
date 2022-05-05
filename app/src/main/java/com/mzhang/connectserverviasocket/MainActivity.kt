@@ -3,24 +3,18 @@ package com.mzhang.connectserverviasocket
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import android.view.View
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mzhang.connectserverviasocket.databinding.ActivityMainBinding
-import java.util.concurrent.Executors
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.PrintWriter
 import java.lang.Exception
-import java.net.Socket
 
 class MainActivity : AppCompatActivity() {
 
     var viewModel: SocketConnection? = null
     private lateinit var binding: ActivityMainBinding
+    private lateinit var adapter: HostRecyclerViewAdapter
+    private var hosts: MutableList<HostNameStatus> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,20 +22,42 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewModel = ViewModelProvider(this).get(SocketConnection::class.java)
 
-        viewModel?.deviceList?.observe(this) {
-            var dev = ""
-            for (s in it) {
-                dev = dev + s + "\n"
-            }
-            binding.textViewDeviceList.text = dev
-        }
+        hosts = arrayListOf()
+//        initRecycler()
+        initObserver()
     }
 
+//    private fun initRecycler() {
+//        adapter = HostRecyclerViewAdapter(hosts)
+//        binding.rvHostList.apply {
+//            this.adapter = adapter
+//            layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+//        }
+//        adapter.updateHostList(null)
+//    }
+
+    private fun initObserver() {
+        viewModel?.deviceList?.observe(this) {
+            hosts.clear()
+            for (s in it) {
+                val parts = s.split(":")
+                val host: HostNameStatus = HostNameStatus(parts[0], parts[1])
+                hosts.add(host)
+//                Log.d("amz095", host.toString())
+            }
+            Log.d("amz095", hosts.toString())
+
+            adapter = HostRecyclerViewAdapter(hosts)
+            binding.rvHostList.adapter = adapter
+            binding.rvHostList.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
+        }
+    }
+    private var ipaddress = ""
+    private var port = 0
 
     fun getDeviceList(v: View) {
-        val ipaddress: String = binding.etIpAddress.text.toString()
+        ipaddress = binding.etIpAddress.text.toString()
         val portStr = binding.etIpPort.text.toString()
-        var port = 0
         try {
             port = portStr.toInt()
         } catch (e: Exception) {
@@ -50,5 +66,19 @@ class MainActivity : AppCompatActivity() {
 //        val port = binding.etIpPort.text.toString().toInt()
         val query = binding.etQuery.text.toString()
         viewModel?.getDeviceList(ipaddress, port, query)
+    }
+
+    fun updateDeviceList(view: View) {
+        Log.d("amz095", hosts.toString())
+
+        var outList: MutableList<String> = arrayListOf("update")
+        for (out in hosts) {
+            val str = out.hostName + ":" + out.status
+            outList.add(str)
+        }
+
+        // Empty line indicates end of file
+        outList.add("\n")
+        viewModel?.updateDeviceList(ipaddress, port,outList)
     }
 }

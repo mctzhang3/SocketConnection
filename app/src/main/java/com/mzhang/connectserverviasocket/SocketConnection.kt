@@ -14,9 +14,6 @@ import java.util.concurrent.Executors
 class SocketConnection : ViewModel(){
     private val _deviceList = MutableLiveData<List<String>>()
     val deviceList : LiveData<List<String>> = _deviceList
-//    var s: Socket? = null
-//    var pw: PrintWriter? = null
-//    var reader: BufferedReader? = null
 
     fun getDeviceList(ipAddress: String, port: Int, query: String) {
         Executors.newSingleThreadExecutor().execute {
@@ -40,14 +37,30 @@ class SocketConnection : ViewModel(){
         }
     }
 
-//    fun closeSocket() {
-//        try {
-//            reader?.close()
-//            pw?.close()
-//            s?.close()
-//        } catch (e: IOException) {
-//            //
-//        }
-//    }
+    fun updateDeviceList(ipAddress: String, port: Int, outList: List<String>) {
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val socket = Socket(ipAddress, port)
+                val pw = PrintWriter(socket.getOutputStream(), true)
+                val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
+
+                for (out in outList) {
+                    pw.write(out)
+                    pw.println()
+                }
+
+                _deviceList.postValue(reader.readLines())
+
+                reader.close()
+                pw.close()
+                socket.close()
+
+            } catch (e: IOException) {
+                //
+                Log.d("amz095", "IOException ... $e")
+            }
+        }
+    }
+
 
 }
