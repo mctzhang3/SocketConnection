@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Connect Server via Socket</string>
     <string name="device_list">Device Name</string>
-    <string name="device_status">status</string>
+    <string name="device_status">Action</string>
     <string name="get_device_list">Query</string>
     <string name="update_device_list">Update</string>
     <string name="query_string">Query String:</string>

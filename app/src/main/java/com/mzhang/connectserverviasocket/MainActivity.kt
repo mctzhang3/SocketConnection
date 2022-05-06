@@ -62,7 +62,18 @@ class MainActivity : AppCompatActivity() {
             }
             Log.d("amz095", hosts.toString())
 
-            adapter = HostRecyclerViewAdapter(hosts)
+            adapter = HostRecyclerViewAdapter(hosts, object : HostRecyclerViewAdapter.ActionListener {
+                override fun onBlockButtonClicked(host: String) {
+                    val action = "block|$host"
+                    viewModel?.updateDevice(ipaddress, port, action)
+                }
+
+                override fun onEnablButtonClicked(host: String) {
+                    val action = "enable|$host"
+                    viewModel?.updateDevice(ipaddress, port, action)
+                }
+
+            })
             binding.rvHostList.adapter = adapter
             binding.rvHostList.layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
         }
@@ -88,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 
         var outList: MutableList<String> = arrayListOf("update")
         for (out in hosts) {
-            val str = out.hostName + "|" + out.status
+            val str = out.hostName + "|" + out.action
             outList.add(str)
         }
 

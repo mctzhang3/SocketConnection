@@ -3,13 +3,12 @@ package com.mzhang.connectserverviasocket
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.widget.SwitchCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 
 
-class HostRecyclerViewAdapter(private var mHostList: MutableList<HostNameStatus>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HostRecyclerViewAdapter(private var mHostList: MutableList<HostNameStatus>, var listener: ActionListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 //    private var mHostList: List<HostNameStatus>? = null
 
 //    @SuppressLint("NotifyDataSetChanged")
@@ -27,7 +26,7 @@ class HostRecyclerViewAdapter(private var mHostList: MutableList<HostNameStatus>
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         mHostList.let { hostList ->
-            (holder as ViewHolder).bind(hostList[position])
+            (holder as ViewHolder).bind(hostList[position], listener)
         }
 
     }
@@ -38,23 +37,27 @@ class HostRecyclerViewAdapter(private var mHostList: MutableList<HostNameStatus>
     }
 
     data class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        private val tvStatus: SwitchCompat = view.findViewById(R.id.status)
+//        private val tvStatus: SwitchCompat = view.findViewById(R.id.status)
         private val tvHostName: TextView = view.findViewById(R.id.textViewHostName)
+        private val buttonBlock = view.findViewById<Button>(R.id.buttonBlock)
+        private val buttonEnable = view.findViewById<Button>(R.id.buttonEnable)
 
-        fun bind(host: HostNameStatus) {
+        fun bind(host: HostNameStatus, listener: ActionListener) {
             tvHostName.text = host.hostName
-            tvStatus.isVisible = host.status == "on" || host.status == "off"
-            tvStatus.isChecked = host.status == "on"
-            tvStatus.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    host.status = "on"
-                } else {
-                    host.status = "off"
-                }
+
+            buttonBlock.setOnClickListener {
+                listener.onBlockButtonClicked(host.hostName)
             }
 
+            buttonEnable.setOnClickListener {
+                listener.onEnablButtonClicked(host.hostName)
+            }
         }
     }
 
+    interface ActionListener {
+        fun onBlockButtonClicked(host: String)
+        fun onEnablButtonClicked(host: String)
+    }
 
 }

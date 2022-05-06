@@ -37,6 +37,29 @@ class SocketConnection : ViewModel(){
         }
     }
 
+    fun updateDevice(ipAddress: String, port: Int, deviceAction: String) {
+        Executors.newSingleThreadExecutor().execute {
+            try {
+                val socket = Socket(ipAddress, port)
+                val pw = PrintWriter(socket.getOutputStream(), true)
+                val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
+
+                pw.write(deviceAction)
+                pw.println()
+
+//                _deviceList.postValue(reader.readLines())
+
+                reader.close()
+                pw.close()
+                socket.close()
+
+            } catch (e: IOException) {
+                //
+                Log.d("amz095", "IOException ... $e")
+            }
+        }
+    }
+
     fun updateDeviceList(ipAddress: String, port: Int, outList: List<String>) {
         Executors.newSingleThreadExecutor().execute {
             try {
