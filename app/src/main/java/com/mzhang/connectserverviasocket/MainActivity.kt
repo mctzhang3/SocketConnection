@@ -1,13 +1,12 @@
 package com.mzhang.connectserverviasocket
 
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mzhang.connectserverviasocket.databinding.ActivityMainBinding
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,9 +43,21 @@ class MainActivity : AppCompatActivity() {
         viewModel?.deviceList?.observe(this) {
             hosts.clear()
             for (s in it) {
-                val parts = s.split(":")
-                val host: HostNameStatus = HostNameStatus(parts[0], parts[1])
-                hosts.add(host)
+                val parts: List<String> = s.split("|")
+                var name = if (parts.isNotEmpty()) {
+                    parts[0]
+                } else {
+                    ""
+                }
+                var status = if (parts.size > 1) {
+                    parts[1]
+                } else {
+                    ""
+                }
+//                if (parts.size > 1) {
+                    val host: HostNameStatus = HostNameStatus(name, status)
+                    hosts.add(host)
+//                }
 //                Log.d("amz095", host.toString())
             }
             Log.d("amz095", hosts.toString())
@@ -77,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
         var outList: MutableList<String> = arrayListOf("update")
         for (out in hosts) {
-            val str = out.hostName + ":" + out.status
+            val str = out.hostName + "|" + out.status
             outList.add(str)
         }
 

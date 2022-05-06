@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 
 
@@ -18,7 +19,7 @@ class HostRecyclerViewAdapter(private var mHostList: MutableList<HostNameStatus>
 //    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val itemView: View = LayoutInflater.from(viewGroup.getContext())
+        val itemView: View = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.host_list_item, viewGroup, false)
 
         return ViewHolder(itemView)
@@ -42,6 +43,7 @@ class HostRecyclerViewAdapter(private var mHostList: MutableList<HostNameStatus>
 
         fun bind(host: HostNameStatus) {
             tvHostName.text = host.hostName
+            tvStatus.isVisible = host.status == "on" || host.status == "off"
             tvStatus.isChecked = host.status == "on"
             tvStatus.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
