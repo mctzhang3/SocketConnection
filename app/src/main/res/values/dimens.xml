@@ -6,5 +6,6 @@
     <dimen name="_66sdp">66dp</dimen>
     <dimen name="_36sdp">36dp</dimen>
     <dimen name="_20ssp">20sp</dimen>
+    <dimen name="_16ssp">16sp</dimen>
 
 </resources>
