@@ -9,14 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 
 class HostRecyclerViewAdapter(private var mHostList: MutableList<HostNameStatus>, var listener: ActionListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-//    private var mHostList: List<HostNameStatus>? = null
-
-//    @SuppressLint("NotifyDataSetChanged")
-//    fun updateHostList(hosts: List<HostNameStatus>?) {
-//        this.mHostList = hosts
-//        notifyDataSetChanged()
-//    }
-
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val itemView: View = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.host_list_item, viewGroup, false)
@@ -33,24 +25,23 @@ class HostRecyclerViewAdapter(private var mHostList: MutableList<HostNameStatus>
 
     override fun getItemCount(): Int {
         return mHostList.size ?: 0
-
     }
 
     data class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 //        private val tvStatus: SwitchCompat = view.findViewById(R.id.status)
         private val tvHostName: TextView = view.findViewById(R.id.textViewHostName)
-        private val buttonBlock = view.findViewById<Button>(R.id.buttonBlock)
-        private val buttonEnable = view.findViewById<Button>(R.id.buttonEnable)
+        private val buttonBlock = view.findViewById<TextView>(R.id.tvBlock)
+        private val buttonEnable = view.findViewById<TextView>(R.id.tvEnable)
 
         fun bind(host: HostNameStatus, listener: ActionListener) {
             tvHostName.text = host.hostName
 
             buttonBlock.setOnClickListener {
-                listener.onBlockButtonClicked(host.hostName)
+                listener.onBlockButtonClicked(host.macAddress)
             }
 
             buttonEnable.setOnClickListener {
-                listener.onEnablButtonClicked(host.hostName)
+                listener.onEnablButtonClicked(host.macAddress)
             }
         }
     }

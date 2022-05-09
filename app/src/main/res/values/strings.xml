@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Connect Server via Socket</string>
+    <string name="app_name">CRSP DEMO</string>
     <string name="device_list">Device Name</string>
     <string name="device_status">Action</string>
     <string name="get_device_list">Query</string>
@@ -7,4 +7,7 @@
     <string name="query_string">Query String:</string>
     <string name="port">Port:</string>
     <string name="ip_address">ip address:</string>
+    <string name="block">Block</string>
+    <string name="settings">settings</string>
+    <string name="enable">Enable</string>
 </resources>
