@@ -1,6 +1,5 @@
 package com.mzhang.connectserverviasocket
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,7 +31,6 @@ class SocketConnection : ViewModel(){
 
             } catch (e: IOException) {
                 //
-                Log.d("amz095", "IOException ... $e")
             }
         }
     }
@@ -55,7 +53,6 @@ class SocketConnection : ViewModel(){
 
             } catch (e: IOException) {
                 //
-                Log.d("amz095", "IOException ... $e")
             }
         }
     }
@@ -80,7 +77,6 @@ class SocketConnection : ViewModel(){
 
             } catch (e: IOException) {
                 //
-                Log.d("amz095", "IOException ... $e")
             }
         }
     }

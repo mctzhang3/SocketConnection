@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -100,7 +99,6 @@ class MainActivity : AppCompatActivity() {
                 val host = HostNameStatus(hostName, macAddress, status)
                 hosts.add(host)
             }
-            Log.d("amz095", hosts.toString())
 
             adapter = HostRecyclerViewAdapter(hosts, object : HostRecyclerViewAdapter.ActionListener {
                 override fun onBlockButtonClicked(host: String) {

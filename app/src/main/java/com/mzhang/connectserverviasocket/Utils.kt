@@ -3,7 +3,7 @@ package com.mzhang.connectserverviasocket
 class Utils {
     companion object {
         const val ROUTER_PORT = 8080
-        const val GET_DEVICE_LIST_COMMAND = "GetDevices"
+        const val GET_DEVICE_LIST_COMMAND = "getdev"
         const val BLOCK_DEVICE_COMMAND = "block"
         const val ENABLE_DEVICE_COMMAND = "enable"
         const val HOST_NAME = "Hostname:"
